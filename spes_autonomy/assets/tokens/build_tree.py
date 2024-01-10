@@ -4,7 +4,7 @@ NEXT_ACTION_INDENTATION = "\n\t\t"
 INDENTATION = "\n\t\t   "
 
 def load_params_from_file():
-    file = open('/spesbot/ros2_ws/src/spesbot/assets/action_params.txt', 'r')
+    file = open('/spesbot/ros2_ws/src/spesbot/assets/action_params.txt', 'r') # path in docker container
     lines = file.readlines()
     loaded_params = []
     for line in lines:
@@ -113,8 +113,6 @@ def build_tree():
     i=0
     fallback_it = 0
     is_fallback = False
-    is_repeat = False
-    # tree = render_template(tree_root_begin, data)
     tree = render_template(behavior_tree, data)
     for a in range(len(actions)):
         action = actions[a]
@@ -143,9 +141,6 @@ def build_tree():
                         tree += NEXT_ACTION_INDENTATION + render_template(move, data)
                     tree+=repeat_end
                     fallback_it+=1
-                # else:
-                #     if(action[0].split(':')[0] == "REPEAT"):
-                #         data["NUM_CYCLES"] = action[0].split(':')[1]
             else:
                 tree+=fallback_begin
                 if len(action) == 2:
@@ -164,8 +159,6 @@ def build_tree():
                 fallback_it = 0
                 fallback_it+=1
                 is_fallback = True
-                print("*****************************************************", is_fallback, fallback_it)
-                
         else:    
             i+=1
             if len(action) == 2:
@@ -181,7 +174,6 @@ def build_tree():
                     tree += NEXT_ACTION_INDENTATION + render_template(move, data)
                 
                 fallback_it+=1
-            print("*********************======*************************", is_fallback, fallback_it)
             if is_fallback==True and fallback_it == 2:
                 tree+=fallback_end
                 fallback_it=0
@@ -202,21 +194,13 @@ def build_tree():
     
 def read_file_content():
     file_path = "/spesbot/ros2_ws/src/spesbot/assets/user_tree.xml"
-
-
     try:
         with open(file_path, 'r') as file:
             linije = file.readlines()
         return linije
     except FileNotFoundError:
-        print(f"Fajl '{file_path}' nije pronađen.")
+        print(f"Dont find the '{file_path}'.")
         return None
     except Exception as e:
-        print(f"Došlo je do greške: {e}")
+        print(f"Error in tree saving: {e}")
         return None
-    
-    # time.sleep(10)
-
-   
-
-    # print(tree)

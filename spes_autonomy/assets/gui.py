@@ -55,13 +55,11 @@ class MyApp:
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill=tk.BOTH, expand=True)
 
-        # Dodaj prvi tab
         self.tab1 = tk.Frame(self.notebook)
         self.notebook.add(self.tab1, text="Code Generator")
 
         self.init_code_generator_tab()
 
-        # Dodaj drugi tab (Lekcije)
         self.tab2 = tk.Frame(self.notebook)
         self.notebook.add(self.tab2, text="Lessons")
 
@@ -69,7 +67,6 @@ class MyApp:
 
     
     def init_code_generator_tab(self):
-        # LabelFrame za sekciju unosa koda
         code_input_section = tk.LabelFrame(self.tab1, text="Request")
         code_input_section.pack(padx=10, pady=10, fill="both", expand="yes")
 
@@ -82,7 +79,6 @@ class MyApp:
         button_webots = tk.Button(code_input_section, text="Start Webots", command=self.open_ros2_launch)
         button_webots.pack(padx=10)
         
-        # LabelFrame za sekciju rezultata
         result_section = tk.LabelFrame(self.tab1, text="Response")
         result_section.pack(padx=10, pady=10, fill="both", expand="yes")
 
@@ -95,55 +91,43 @@ class MyApp:
         lessons_section = tk.LabelFrame(self.tab2, text="Lessons")
         lessons_section.pack(padx=10, pady=10, fill="both", expand="yes")
 
-        # Lesson 1
         lesson1_text = (
             "Welcome to RobotPlayground! Check out tutorials for our platform on the following link."
         )
         lesson1_label = tk.Label(lessons_section, text=lesson1_text, wraplength=600)
         lesson1_label.pack(pady=10)
 
-        # Add a button to open lesson 1
         button_lesson1 = tk.Button(lessons_section, text="Show Tutorial", command=self.open_lesson1,  width=15, height=3)
         button_lesson1.pack(side=tk.TOP, padx=10, pady=10)
     
     def open_lesson1(self):
-        # Pokreće HTTP server u zasebnom thread-u
         http_server_thread = threading.Thread(target=self.run_http_server)
         http_server_thread.start()
-
-        # Otvori HTML datoteku u podrazumevanom veb pregledaču
-        lesson1_path = "http://localhost:8000/index.html"  # Prilagodite putanju prema vašem projektu
+        lesson1_path = "http://localhost:8000/index.html"
         webbrowser.open_new_tab(lesson1_path)
 
     def run_http_server(self):
         try:
-            # Pokreće HTTP server u pozadini
             http_server_process = subprocess.Popen(["python3", "-m", "http.server"], cwd="/spesbot/ros2_ws/src/spesbot/assets")
-
-            # Sačekaj da se završi HTTP server pre nego što zatvorimo proces
             http_server_process.wait()
         except Exception as e:
             print(f"Greška prilikom pokretanja HTTP servera: {str(e)}")
 
     def show_input_content(self):
-        # Prikazuje sadržaj unesen u polje za unos ispod
-        user_input = self.entry_text.get("1.0", tk.END).strip()  # Uzimanje sadržaja iz Text widgeta
-        self.result_text.delete("1.0", tk.END)  # Obrisati prethodni tekst
+        user_input = self.entry_text.get("1.0", tk.END).strip()
+        self.result_text.delete("1.0", tk.END)
 
         self.result_text.insert(tk.END, f"Your input: {user_input}\n")
         self.result_text.insert(tk.END, f"\n\n\t\t\tGenerating code...\n")
-        # Koristimo after metodu za odgodu izvršavanja generate_tokens funkcije
         self.root.after(1000, self.generate_and_show_output, user_input)
 
     def generate_and_show_output(self, user_input):
-        # Generiše izlaz i prikazuje ga
         output = generate_tokens(user_input)
         self.result_text.insert(tk.END, f"\nAnsware: \n")
         
         answare_content = extract_answare(output)
         words = [word.strip() for word in answare_content.split(';')]
 
-        # Upisivanje riječi u datoteku, svaka riječ u novom redu
         with open('/spesbot/ros2_ws/src/spesbot/assets/action_params.txt', 'w') as file:
             file.write('\n'.join(words))
         
@@ -153,14 +137,8 @@ class MyApp:
             self.result_text.insert(tk.END, f"{line}")
             self.root.update_idletasks() 
             self.root.after(200)
-
-        
-    def clear_result(self):
-        self.result_text.delete("1.0", tk.END)
         
     def open_ros2_launch(self):
-        # Otvara ros2 launch naredbu
-        user_input = self.entry_text.get("1.0", tk.END).strip()  # Uzimanje unosa iz Text widgeta
         tokens.build_tree.build_tree()
 
         try:
@@ -193,12 +171,3 @@ if __name__ == "__main__":
 # I want that my robot go 50 cm forward. Repeat last action 2 times. After that rotate for 150 degrees and move 10 cm. Rotate the robot 10 times by 10 degrees.
 # I want that my robot go 50 cm forward. Repeat last action 2 times. After that rotate for 150 degrees and move 10 cm. Rotate the robot  by 10 degrees and repeat this action 10 times.
 # I want that my robot go 50 cm forward. Repeat last action 2 times. After that rotate for 150 degrees and move 10 cm, otherwise rotate the robot by 120 degrees. Rotate the robot  by 10 degrees and repeat this action 10 times. 
-
-
-# ROTATE, X:150
-# TRANSLATE, X:50
-# REPEAT:2
-# ROTATE, X:120
-# FALLBACK
-# TRANSLATE, X:10
-# REPEAT:10

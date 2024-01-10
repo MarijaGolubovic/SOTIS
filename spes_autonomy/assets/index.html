@@ -42,7 +42,7 @@
             padding: 20px;
         }
 
-        /* Dodatni stil za ikonicu u gornjem desnom uglu */
+        /* Aditional style for icon in right top corrner */
         #link-behaviortree {
             position: fixed;
             top: 10px;
@@ -85,26 +85,24 @@
             color: #2d2d2d;
         }
 
-        /* Dodajemo podršku za obojavanje teksta u XML sintaksi */
         .xml-code .hljs {
             display: block;
             overflow-x: auto;
             padding: 0.5em;
-            color: #2d2d2d; /* Dark gray text color for better readability */
+            color: #2d2d2d;
         }
 
-        /* Bojenje teksta za XML sintaksu */
         .xml-code .hljs .tag,
         .xml-code .hljs .attr,
         .xml-code .hljs .string {
-            color: #e44d26; /* Orange color for tags, attributes, and strings */
+            color: #e44d26;
         }
 
         .xml-code .hljs .name {
-            color: #795da3; /* Purple color for tag names */
+            color: #795da3;
         }
         .xml-highlight {
-            color: #d62222; /* Specify the color for XML highlight */
+            color: #d62222;
         }
 
         #content-container {
@@ -113,11 +111,11 @@
         }
 
         #code-column {
-            width: 60%; /* Adjust the width of the code column as needed */
+            width: 60%;
         }
 
         #video-column {
-            width: 35%; /* Adjust the width of the video column as needed */
+            width: 35%;
         }
 
         .section-navigation {
@@ -141,13 +139,12 @@
         .section-navigation.right {
             right: 20px;
         }
-        /* Dodajte boje koje želite koristiti za neaktivni i aktivan link */
         nav a {
-            color: #e7e6e6; /* Siva boja za neaktivni link */
+            color: #e7e6e6;
         }
 
         nav a.active {
-            color: #FF5252; /* Crvena boja za aktivan link (prilagodite prema potrebi) */
+            color: #FF5252;
         }
 
         .exam-task {
@@ -158,7 +155,6 @@
             border-radius: 5px;
         }
 
-        /* Styling for the button */
         #showTasksBtn, #rotate-showTasksBtn, #repeat-showTasksBtn, #fallback-showTasksBtn {
             margin-top: 10px;
             padding: 5px 10px;
@@ -169,7 +165,6 @@
             border-radius: 5px;
         }
 
-        /* Styling for the validation button */
         #validateBtn, #rotate-validateBtn, #repeat-validateBtn, #fallback-validateBtn {
             display: none;
             margin-top: 10px;
@@ -182,11 +177,11 @@
         }
 
         .correct-answer {
-            background-color: #8FED8F; /* Zelena boja za tačan odgovor */
+            background-color: #8FED8F;
         }
     
         .incorrect-answer {
-            background-color: #FF8F8F; /* Crvena boja za netačan odgovor */
+            background-color: #FF8F8F;
         }
 
         
@@ -261,8 +256,6 @@
     </header>
 
     <nav>
-        <!-- <a href="#introduction">Introduction</a>
-        <a href="#rotate">Rotate</a> -->
         <a href="#introduction" onclick="setActiveLink('introduction')">Introduction</a>
         <a href="#translate" onclick="setActiveLink('translate')">Translate</a>
         <a href="#rotate" onclick="setActiveLink('rotate')">Rotate</a>
@@ -295,7 +288,6 @@
 
     <section id="translate">
         <div id="content-container">
-            <!-- Code on the left -->
             <div id="code-column">
                 <h2>Translate</h2>
                 <div class="tutorial-content">
@@ -316,8 +308,6 @@
                     </code>
                 </div>
             </div>
-
-            <!-- Video on the right -->
             <div id="video-column">
                 <aside id="video-section">
                     <h2>Demo</h2>
@@ -388,7 +378,6 @@
 
     <section id="rotate">
         <div id="content-container">
-            <!-- Code on the left -->
             <div id="code-column">
                 <h2>Rotate</h2>
                 <div class="tutorial-content">
@@ -412,7 +401,6 @@
                 </div>
             </div>
 
-            <!-- Video on the right -->
             <div id="video-column">
                 <aside id="video-section">
                     <h2>Demo</h2>
@@ -501,7 +489,6 @@
 
     <section id="repeat">
         <div id="content-container">
-            <!-- Code on the left -->
             <div id="code-column">
                 <h2>Repeat</h2>
                 <div class="tutorial-content">
@@ -531,7 +518,6 @@
                 </div>
             </div>
 
-            <!-- Video on the right -->
             <div id="video-column">
                 <aside id="video-section">
                     <h2>Demo</h2>
@@ -609,7 +595,6 @@
     
     <section id="fallback">
         <div id="content-container">
-            <!-- Code on the left -->
             <div id="code-column">
                 <h2>Fallback</h2>
                 <div class="tutorial-content">
@@ -644,7 +629,6 @@
                 </div>
             </div>
 
-            <!-- Video on the right -->
             <div id="video-column">
                 <aside id="video-section">
                     <h2>Demo</h2>
@@ -766,16 +750,11 @@
             <p>If the robot moves forward 30 cm and fails, let it attempt to rotate by 100 degrees. If that also fails, let it move to the other side by 60 degrees.</p>
             <p>Let the robot move forward. In case it cannot move forward, let it move backward by 20 cm, and then rotate by 90 degrees.</p>
         </div>
-    
-        <!-- Navigation Button -->
         <div class="section-navigation left" data-target="fallback">←</div>
     </section>
     
     
 
-    
-
-    <!-- Dodatni element za link sa ikonicom u gornjem desnom uglu -->
     <a id="link-behaviortree" href="https://www.behaviortree.dev/docs/Intro" target="_blank">
         <img src="bt_icon.png" alt="Behavior Tree Icon" style="width: 60px; height: 60px; max-width: none; max-height: none;">
         Behavior Tree
@@ -785,7 +764,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/xml.min.js"></script>
 
     <script>
-        // Explicitly specify the language for highlighting
         document.addEventListener('DOMContentLoaded', (event) => {
             const xmlCodeElements = document.querySelectorAll('.xml-code pre');
             
@@ -802,99 +780,63 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Prikazuje Introduction sekciju kao podrazumevanu
             showSection('introduction');
-
-            // Dodaje event listenere za sva dugmad u navigaciji
             document.querySelectorAll('nav a').forEach(function(navLink) {
                 navLink.addEventListener('click', function(event) {
-                    // Spriječava uobičajeno ponašanje linkova
                     event.preventDefault();
-
-                    // Dobavlja ID sekcije iz href atributa linka
                     var sectionId = this.getAttribute('href').substring(1);
-
-                    // Prikazuje odabranu sekciju
                     showSection(sectionId);
                 });
             });
         });
 
         function showSection(sectionId) {
-            // Sakriva sve sekcije
             document.querySelectorAll('section').forEach(function(section) {
                 section.style.display = 'none';
             });
-
-            // Prikazuje odabranu sekciju
             document.getElementById(sectionId).style.display = 'block';
         }
     </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Proverava da li je Introduction sekcija već prikazana
             var introductionShown = localStorage.getItem('introductionShown');
-
-            // Ako nije prikazana, prikazuje je i označava kao prikazanu
             if (!introductionShown) {
                 showSection('introduction');
                 localStorage.setItem('introductionShown', 'true');
             }
-
-            // Dodaje event listenere za sva dugmad u navigaciji
             document.querySelectorAll('nav a').forEach(function(navLink) {
                 navLink.addEventListener('click', function(event) {
-                    // Spriječava uobičajeno ponašanje linkova
                     event.preventDefault();
-
-                    // Dobavlja ID sekcije iz href atributa linka
                     var sectionId = this.getAttribute('href').substring(1);
-
-                    // Prikazuje odabranu sekciju
                     showSection(sectionId);
                 });
             });
 
-            // Dodaje strelice za navigaciju
             document.querySelectorAll('.section-navigation').forEach(function(navElement) {
                 navElement.addEventListener('click', function(event) {
-                    // Dobavlja ID sledeće ili prethodne sekcije
                     var targetSection = this.getAttribute('data-target');
-                    
-                    // Prikazuje odabranu sekciju
                     showSection(targetSection);
                 });
             });
         });
 
         function showSection(sectionId) {
-            // Sakriva sve sekcije
             document.querySelectorAll('section').forEach(function(section) {
                 section.style.display = 'none';
             });
             setActiveLink(sectionId);
-            // Prikazuje odabranu sekciju
             document.getElementById(sectionId).style.display = 'block';
         }
     </script>
     <script>
-        // Funkcija koja se poziva kada se klikne na link u navigaciji
+        // Call this function when click on button in nav bar
         function setActiveLink(sectionId) {
-            // Uklonite aktivnost sa svih linkova
             document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
-        
-            // Dodajte aktivnu klasu samo odabranom linku
             document.querySelector(`nav a[href="#${sectionId}"]`).classList.add('active');
         }
-        
-        // Povežite ovu funkciju s događajem kada se promijeni sekcija (npr. kada se klikne na strelice za navigaciju)
         function navigateSection(direction) {
-            // Logika za promjenu sekcije
-            // ...
-        
-            // Nakon promjene sekcije, postavite aktivni link
-            setActiveLink('nova-sekcija-id'); // Zamijenjajte 'nova-sekcija-id' s ID-em nove sekcije
+            setActiveLink('nova-sekcija-id');
         }
         </script>
 
