@@ -24,6 +24,6 @@ make exec
 Running the Application
 
 After downloading and copying the LLama model into the assets directory, run the application in the Docker container with the following command:
-
+```
 python3 src/spesbot/assets/gui.py
-
+```
