@@ -11,7 +11,7 @@ This repo represent part of platform for robot control. You need to have this pl
     ```
    This is only necessary the first time.
 
-2. Download the LLama model using the following link:
+2. Download the LLaMA model using the following link:
    [LLama model](https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/blob/main/llama-2-7b-chat.Q8_0.gguf)
    Other model sizes you can finds on following [link](https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/tree/main). For newest version visit [Hugging Face](https://huggingface.co/models) site.
 
