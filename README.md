@@ -20,7 +20,7 @@
 Every time you want to start the application after the initial setup, execute the following command:
 ```bash
 make exec
-
+```
 Running the Application
 
 After downloading and copying the LLama model into the assets directory, run the application in the Docker container with the following command:
