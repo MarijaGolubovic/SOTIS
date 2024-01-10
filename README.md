@@ -20,5 +20,5 @@ Running the Application
 
 After downloading and copying the LLama model into the assets directory, run the application with the following command:
 ```
-python3 src/spesbot/assets/gui.py
+python3 gui.py
 ```
