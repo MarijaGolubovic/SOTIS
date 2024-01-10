@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Playground</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #666;
+            overflow: hidden;
+        }
+
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        section {
+            padding: 20px;
+        }
+
+        /* Dodatni stil za ikonicu u gornjem desnom uglu */
+        #link-behaviortree {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        #link-behaviortree img {
+            margin-right: 5px;
+        }
+        .emphasis {
+            font-weight: bold;
+            color: #d62222;
+        }
+
+        .code {
+            background-color: #f8f9fa;
+            padding: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+        }
+        .xml-code pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        .xml-code {
+            background-color: #f8f9fa;
+            padding: 10px;
+            display: block;
+            overflow-x: auto;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            color: #2d2d2d;
+        }
+
+        /* Dodajemo podršku za obojavanje teksta u XML sintaksi */
+        .xml-code .hljs {
+            display: block;
+            overflow-x: auto;
+            padding: 0.5em;
+            color: #2d2d2d; /* Dark gray text color for better readability */
+        }
+
+        /* Bojenje teksta za XML sintaksu */
+        .xml-code .hljs .tag,
+        .xml-code .hljs .attr,
+        .xml-code .hljs .string {
+            color: #e44d26; /* Orange color for tags, attributes, and strings */
+        }
+
+        .xml-code .hljs .name {
+            color: #795da3; /* Purple color for tag names */
+        }
+        .xml-highlight {
+            color: #d62222; /* Specify the color for XML highlight */
+        }
+
+        #content-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #code-column {
+            width: 60%; /* Adjust the width of the code column as needed */
+        }
+
+        #video-column {
+            width: 35%; /* Adjust the width of the video column as needed */
+        }
+
+        .section-navigation {
+            position: fixed;
+            bottom: 20px;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            font-size: 20px;
+            background-color: #8b8a8a;
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .section-navigation.left {
+            left: 20px;
+        }
+
+        .section-navigation.right {
+            right: 20px;
+        }
+        /* Dodajte boje koje želite koristiti za neaktivni i aktivan link */
+        nav a {
+            color: #e7e6e6; /* Siva boja za neaktivni link */
+        }
+
+        nav a.active {
+            color: #FF5252; /* Crvena boja za aktivan link (prilagodite prema potrebi) */
+        }
+
+        .exam-task {
+            display: none;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* Styling for the button */
+        #showTasksBtn, #rotate-showTasksBtn, #repeat-showTasksBtn, #fallback-showTasksBtn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        /* Styling for the validation button */
+        #validateBtn, #rotate-validateBtn, #repeat-validateBtn, #fallback-validateBtn {
+            display: none;
+            margin-top: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .correct-answer {
+            background-color: #8FED8F; /* Zelena boja za tačan odgovor */
+        }
+    
+        .incorrect-answer {
+            background-color: #FF8F8F; /* Crvena boja za netačan odgovor */
+        }
+
+        
+        section#exams {
+            background-color: #fff;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            box-sizing: border-box;
+        }
+        
+        h2 {
+            color: #343a40;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .exam-task {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        
+        .exam-task h4 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .exam-task p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .tutorial-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tutorial-section h2 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .tutorial-section .task {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #fff;
+        }
+        
+        .tutorial-section h3 {
+            color: #FF5252;
+        }
+        
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/xml.min.js"></script>
+
+</head>
+<body>
+
+    <header>
+        <h1>Robot Playground</h1>
+    </header>
+
+    <nav>
+        <!-- <a href="#introduction">Introduction</a>
+        <a href="#rotate">Rotate</a> -->
+        <a href="#introduction" onclick="setActiveLink('introduction')">Introduction</a>
+        <a href="#translate" onclick="setActiveLink('translate')">Translate</a>
+        <a href="#rotate" onclick="setActiveLink('rotate')">Rotate</a>
+        <a href="#repeat" onclick="setActiveLink('repeat')">Repeat</a>
+        <a href="#fallback" onclick="setActiveLink('fallback')">Fallback</a>
+        <a href="#exams" onclick="setActiveLink('exams')">Exams</a>
+        
+    </nav>
+
+    <section id="introduction" class="tutorial-section">
+            <h2>Welcome to Robot Playground: An Interactive Learning Experience</h2>
+        
+            <div class="tutorial-content">
+                <p>Welcome to <span class="emphasis">Robot Playground</span> - an interactive learning experience where you can master programming paradigms! <img src="programming.gif" style="width: 125px; height: 100px; float: left; margin-right: 20px;" alt="AI Chat Icon"></p> 
+        
+                <p>Our mission is to assist you in grasping programming concepts through engaging experiences. In this tutorial series, we'll leverage an AI chat <img src="lama.png" style="width: 35px; height: 35px;" alt="AI Chat Icon"> interface to generate code, allowing you to run it in a simulator. <img src="webots.png" style="width: 35px; height: 35px;" alt="AI Chat Icon"> </p>
+        
+                <p>Whether you're a <span class="emphasis">beginner</span> or an <span class="emphasis">experienced coder</span>, this tutorial series is designed to enhance your skills and make learning fun.</p>
+            </div>
+        
+            <div class="tutorial-action">
+                <p>Let's dive into the basics and gradually explore advanced programming concepts in upcoming lessons.</p>
+        
+                <p>Are you ready to elevate your programming skills? Let's get started! 🚀</p>
+            </div>
+            <div class="section-navigation right" data-target="translate"><b>→</b></div>
+        </section>
+
+
+
+    <section id="translate">
+        <div id="content-container">
+            <!-- Code on the left -->
+            <div id="code-column">
+                <h2>Translate</h2>
+                <div class="tutorial-content">
+                    <p>In the "Translate" section, we'll explore the translation action. This action allows the robot to move to a new position in a specified direction.</p>
+                    <p>The goal of this lesson is that you understand concept of variable and params in programing. The transalte action present simple action who only move robot on specific position,
+                     user only send distance who want to them robot travel. And exactly that distance represent variable or parameter in programing.
+                    </p>
+                    <p>Here's an example using <span class="xml-highlight">XML</span>:</p>
+
+                    <code class="xml-code language-xml">
+                        <pre>
+    &lt;Translate name="TRANSLATE"
+               frame_id="base_link"
+               ignore_obstacles="True"
+               x="0.5"
+               error="error"/&gt;
+                    </pre>
+                    </code>
+                </div>
+            </div>
+
+            <!-- Video on the right -->
+            <div id="video-column">
+                <aside id="video-section">
+                    <h2>Demo</h2>
+                    <video width="520" height="440" controls>
+                        <source src="translate_video.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </aside>
+            </div>
+        </div>
+
+        <div class="tutorial-content">
+            <p>The above XML code represents a translation action. In this example, the robot is instructed to translate by 0.5 units along the x-axis.</p>
+
+            <p>You can adjust the parameters such as <code>frame_id</code>, <code>ignore_obstacles</code>, and <code>x</code> to achieve the desired translation behavior. Experiment with different values to observe how the robot responds.</p>
+
+            <p>Stay curious and keep experimenting! &#128512; &#128640;</p>
+            
+        </div>
+        <p>For additional tasks, check the <b style="color: #333;">Exams</b> section, and before that, take a short quiz with a few questions.  &#128175 &#128488 &#128171</p>
+        <button id="showTasksBtn">Take Exams</button>
+
+        
+        <div class="exam-task" id="translate-task1">
+            <h4>Task 1:</h4>
+            <p>What does the Translate action do?</p>
+            <div class="exam-task-options">
+                <input type="radio" name="translate-task1-option" value="a"> A. Moves the robot absolutely to a specific point<br>
+                <input type="radio" name="translate-task1-option" value="b"> B. Moves the robot relatively<br>
+            </div>
+        </div>
+
+        <div class="exam-task" id="translate-task2">
+            <h4>Task 2:</h4>
+            <p>If we move the robot by 30 cm, what should the value of X be?</p>
+            <div class="exam-task-options">
+                <input type="radio" name="translate-task2-option" value="a"> A. 30<br>
+                <input type="radio" name="translate-task2-option" value="b"> B. 0.30<br>
+                <input type="radio" name="translate-task2-option" value="c"> C. 300<br>
+            </div>
+        </div>
+
+        <div class="exam-task" id="translate-task3">
+            <h4>Task 3:</h4>
+            <p>Given the code:</p>
+            <pre>
+&lt;Translate name="TRANSLATE"
+           frame_id="base_link"
+           ignore_obstacles="True"
+           x="0.5"
+           error="error"/&gt;
+            </pre>
+            <p>How much did we move the robot?</p>
+            <div class="exam-task-options">
+                <input type="radio" name="translate-task3-option" value="a"> A. 0.5 cm<br>
+                <input type="radio" name="translate-task3-option" value="b"> B. 5 m<br>
+                <input type="radio" name="translate-task3-option" value="c"> C. 0.5 m<br>
+            </div>
+        </div>
+        <button id="validateBtn">Validate Answers</button>
+
+
+
+
+        <div class="section-navigation left" data-target="introduction">←</div>
+        <div class="section-navigation right" data-target="rotate">→</div>
+    </section>
+
+    <section id="rotate">
+        <div id="content-container">
+            <!-- Code on the left -->
+            <div id="code-column">
+                <h2>Rotate</h2>
+                <div class="tutorial-content">
+                    <p>In the "Rotate" section, we'll explore the rotation action. This action allows the robot to turn in a specified direction for a certain number of degrees.</p>
+                    <p>In this lesson, as well as in the previous one, our goal is to explain the role of parameters and variables in programming. This time, we will do so with the help of the <code>yaw</code> parameter in the Rotate Action.</p>
+                    <p>Here's an example using <span class="xml-highlight">XML</span>:</p>
+
+                    <code class="xml-code">
+                        <pre>
+            &lt;Move name="ROTATE"
+                frame_id="base_link"
+                mode="1"
+                ignore_obstacles="True"
+                x="0"
+                y="0"
+                yaw="150."    
+                error="error"
+                reversing="0"/&gt;
+                </pre>
+                    </code>
+                </div>
+            </div>
+
+            <!-- Video on the right -->
+            <div id="video-column">
+                <aside id="video-section">
+                    <h2>Demo</h2>
+                    <video width="520" height="440" controls>
+                        <source src="rotate_video.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </aside>
+            </div>
+        </div>
+
+        <div class="tutorial-content">
+            <p>The above XML code represents a rotation action. In this example, the robot is instructed to rotate by 150 degrees in the yaw direction.</p>
+
+            <p>You can adjust the parameters such as <code>x</code>, <code>y</code>, and <code>yaw</code> to achieve the desired rotation behavior. Experiment with different values to observe how the robot responds.</p>
+            <p>Stay curious and keep experimenting! &#128512; &#128640;</p>
+        </div>
+
+        <p>For additional tasks, check the <b style="color: #333;">Exams</b> section, and before that, take a short quiz with a few questions.  &#128175 &#128488 &#128171</p>
+        <button id="rotate-showTasksBtn">Take Exam</button>
+
+        <div class="exam-task" id="rotate-task1">
+            <h4>Task 1:</h4>
+            <p>Angle in the Rotate action is set in:</p>
+            <div class="exam-task-options">
+                <input type="radio" name="rotate-task1-option" value="a"> A. radians<br>
+                <input type="radio" name="rotate-task1-option" value="b"> B. degrees<br>
+            </div>
+        </div>
+        
+        <div class="exam-task" id="rotate-task2">
+            <h4>Task 2:</h4>
+            <p>Which parameter do we change to rotate the robot??</p>
+            <div class="exam-task-options">
+                <input type="radio" name="rotate-task2-option" value="a"> A. x<br>
+                <input type="radio" name="rotate-task2-option" value="b"> B. y<br>
+                <input type="radio" name="rotate-task2-option" value="c"> C. z<br>
+                <input type="radio" name="rotate-task2-option" value="d"> D. yaw<br>
+            </div>
+        </div>
+        
+        <div class="exam-task" id="rotate-task3">
+            <h4>Task 3:</h4>
+            <p>Given the code:</p>
+            <pre>
+        &lt;Move name="ROTATE"
+            frame_id="base_link"
+            mode="1"
+            ignore_obstacles="True"
+            x="0"
+            y="0"
+            yaw="3.14"    
+            error="error"
+            reversing="0"/&gt;
+            </pre>
+            <p>How much did we rotate the robot?</p>
+            <div class="exam-task-options">
+                <input type="radio" name="rotate-task3-option" value="a"> A. 3.14 degrees<br>
+                <input type="radio" name="rotate-task3-option" value="b"> B. 3.14 radians<br>
+            </div>
+        </div>
+        
+        <div class="exam-task" id="rotate-task4">
+            <h4>Task 4:</h4>
+            <p>If we want the robot to make one full circle, what value should we send?</p>
+            <div class="exam-task-options">
+                <input type="radio" name="rotate-task5-option" value="a"> A. π (pi)<br>
+                <input type="radio" name="rotate-task5-option" value="b"> B. 2π (2pi)<br>
+                <input type="radio" name="rotate-task5-option" value="c"> C. 360<br>
+            </div>
+        </div>
+        
+        <button id="rotate-validateBtn" style="display: none;">Validate Answers</button>
+        
+
+<button id="rotate-validateBtn">Validate Answers</button>
+
+
+
+
+        <div class="section-navigation left" data-target="translate">←</div>
+        <div class="section-navigation right" data-target="repeat">→</div>
+
+    </section>
+
+
+    <section id="repeat">
+        <div id="content-container">
+            <!-- Code on the left -->
+            <div id="code-column">
+                <h2>Repeat</h2>
+                <div class="tutorial-content">
+                    <p>In the "Repeat" section, we'll explore the repetitive action. This action allows the robot to perform a sequence of tasks multiple times.</p>
+                    <p>From what has been said so far, you can infer that we have some repetitive behavior or cycles. That's exactly what loops do in programming. 
+                        The code inside a loop repeats as many times as the value of the iterator.
+                        In the video attached, you can see a good example of such behavior.</p>
+                    <p>Here's an example using <span class="xml-highlight">XML</span>:</p>
+
+                    <code class="xml-code language-xml">
+                        <pre>
+    &lt;Repeat num_cycles="5"&gt;
+        &lt;Sequence&gt;
+            &lt;!-- Your existing actions go here --&gt;
+            &lt;Move name="MoveAction"
+                  frame_id="base_link"
+                  ignore_obstacles="true"
+                  x="0"
+                  y="0"
+                  yaw="20"
+                  error="error"/&gt;
+            &lt;!-- End of existing actions --&gt;
+        &lt;/Sequence&gt;
+    &lt;/Repeat&gt;
+                    </pre>
+                    </code>
+                </div>
+            </div>
+
+            <!-- Video on the right -->
+            <div id="video-column">
+                <aside id="video-section">
+                    <h2>Demo</h2>
+                    <video width="520" height="440" controls>
+                        <source src="repeat_vid.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </aside>
+            </div>
+        </div>
+
+        <div class="tutorial-content">
+            <p>The above XML code represents a repetitive action. In this example, the robot is instructed to move in the yaw direction by 20 degrees, repeated 5 times.</p>
+
+            <p>You can adjust the parameters to fit your specific requirements and experiment with different values to observe how the robot responds.</p>
+
+            <p>Stay curious and keep experimenting! &#128512; &#128640;</p>
+            <p>For additional tasks, check the <b style="color: #333;">Exams</b> section, and before that, take a short quiz with a few questions.  &#128175 &#128488 &#128171</p>
+
+            
+            <button id="repeat-showTasksBtn">Take Exam</button>
+
+            <div class="exam-task" id="repeat-task1">
+                <h4>Task 1:</h4>
+                <p>What does the Repeat action do?</p>
+                <div class="exam-task-options">
+                    <input type="radio" name="repeat-task1-option" value="a"> A. Repeats the specified actions for a certain number of times<br>
+                    <input type="radio" name="repeat-task1-option" value="b"> B. Repeats the entire program<br>
+                </div>
+            </div>
+
+            <div class="exam-task" id="repeat-task2">
+                <h4>Task 2:</h4>
+                <p>If we set the repeat count to 3, how many times will the specified actions be repeated?</p>
+                <div class="exam-task-options">
+                    <input type="radio" name="repeat-task2-option" value="a"> A. 1 time<br>
+                    <input type="radio" name="repeat-task2-option" value="b"> B. 2 times<br>
+                    <input type="radio" name="repeat-task2-option" value="c"> C. 3 times<br>
+                </div>
+            </div>
+
+            <div class="exam-task" id="repeat-task3">
+                <h4>Task 3:</h4>
+                <p>Given the code:</p>
+                <pre>
+                    &lt;Repeat num_cycles="5"&gt;
+                        &lt;Sequence&gt;
+                            &lt;!-- Your existing actions go here --&gt;
+                            &lt;Move name="MoveAction"
+                                  frame_id="base_link"
+                                  ignore_obstacles="true"
+                                  x="0"
+                                  y="0"
+                                  yaw="15"
+                                  error="error"/&gt;
+                            &lt;!-- End of existing actions --&gt;
+                        &lt;/Sequence&gt;
+                    &lt;/Repeat&gt;
+                                    </pre>
+                <p>How many degrees will the robot rotate in the end?</p>
+                <div class="exam-task-options">
+                    <input type="radio" name="repeat-task3-option" value="a"> A. 120 time<br>
+                    <input type="radio" name="repeat-task3-option" value="b"> B. 15 times<br>
+                    <input type="radio" name="repeat-task3-option" value="c"> C. 75 times<br>
+                </div>
+            </div>
+
+            <button id="repeat-validateBtn">Validate Answers</button>
+
+
+        </div>
+        <div class="section-navigation left" data-target="rotate">←</div>
+        <div class="section-navigation right" data-target="fallback">→</div>
+    </section>
+    
+    <section id="fallback">
+        <div id="content-container">
+            <!-- Code on the left -->
+            <div id="code-column">
+                <h2>Fallback</h2>
+                <div class="tutorial-content">
+                    <p>In the "Fallback" section, we'll explore the fallback action. This action allows the robot to execute an alternative action if the primary action fails.</p>
+                    <p>After the introductory sentence, you might already infer which programming concept is being discussed. If the execution of a particular part of the code depends
+                         on the fulfillment of a condition, we are referring to an "if" statement or branching. Here, it is represented through a fallback, but the goal is the
+                          same. If a certain condition is not met, the current action is interrupted, and the program moves on to the next one.</p>
+                    <p>Here's an example using <span class="xml-highlight">XML</span>:</p>
+
+                    <code class="xml-code language-xml">
+                        <pre>
+    &lt;Fallback&gt;
+        &lt;Sequence&gt;
+            &lt;Move name="RotateAction"
+                  frame_id="base_link"
+                  ignore_obstacles="true"
+                  x="0"
+                  y="0"
+                  yaw="90"
+                  error="error"/&gt;
+            &lt;ForceSuccess&gt;
+                &lt;Translate name="MoveForward"
+                           frame_id="base_link"
+                           ignore_obstacles="false"
+                           x="0.3"
+                           error="error"/&gt;
+            &lt;/ForceSuccess&gt;
+        &lt;/Sequence&gt;
+    &lt;/Fallback&gt;
+                </pre>
+                    </code>
+                </div>
+            </div>
+
+            <!-- Video on the right -->
+            <div id="video-column">
+                <aside id="video-section">
+                    <h2>Demo</h2>
+                    <video width="520" height="440" controls>
+                        <source src="fallback_vid.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </aside>
+            </div>
+        </div>
+
+        <div class="tutorial-content">
+            <p>The above XML code represents a fallback action. In this example, the robot is instructed to rotate by 90 degrees. If this rotation fails, it will attempt to move forward by 30 cm.</p>
+
+            <p>You can adjust the parameters to fit your specific requirements and experiment with different values to observe how the robot responds.</p>
+
+            <p>Stay curious and keep experimenting! &#128512; &#128640;</p>
+            <p>For additional tasks, check the <b style="color: #333;">Exams</b> section, and before that, take a short quiz with a few questions.  &#128175 &#128488 &#128171</p>
+        </div>
+
+        <button id="fallback-showTasksBtn">Take Exam</button>
+
+            <div class="exam-task" id="fallback-task1">
+                <h4>Task 1:</h4>
+                <p>Given the code:</p>
+                <pre>
+                    &lt;Fallback&gt;
+                        &lt;Sequence&gt;
+                            &lt;Move name="RotateAction"
+                                  frame_id="base_link"
+                                  ignore_obstacles="true"
+                                  x="0"
+                                  y="0"
+                                  yaw="90"
+                                  error="error"/&gt;
+                            &lt;ForceSuccess&gt;
+                                &lt;Translate name="MoveForward"
+                                           frame_id="base_link"
+                                           ignore_obstacles="false"
+                                           x="0.3"
+                                           error="error"/&gt;
+                            &lt;/ForceSuccess&gt;
+                        &lt;/Sequence&gt;
+                    &lt;/Fallback&gt;
+                                </pre>
+                <p>If the action fails, what should the robot do?</p>
+                <div class="exam-task-options">
+                    <input type="radio" name="fallback-task1-option" value="a"> A. It will rotate by 90 degrees.<br>
+                    <input type="radio" name="fallback-task1-option" value="b"> B. It will move forward by 30 cm.<br>
+                    <input type="radio" name="fallback-task1-option" value="c"> C. Nothing<br>
+                </div>
+            </div>
+
+            <div class="exam-task" id="fallback-task2">
+                <h4>Task 2:</h4>
+                <p>Given the code:</p>
+                <pre>
+                    &lt;Fallback&gt;
+                        &lt;Sequence&gt;
+                            &lt;Move name="RotateAction"
+                                  frame_id="base_link"
+                                  ignore_obstacles="true"
+                                  x="0"
+                                  y="0"
+                                  yaw="90"
+                                  error="error"/&gt;
+                            &lt;ForceSuccess&gt;
+                                &lt;Translate name="MoveForward"
+                                           frame_id="base_link"
+                                           ignore_obstacles="false"
+                                           x="0.3"
+                                           error="error"/&gt;
+                            &lt;/ForceSuccess&gt;
+                        &lt;/Sequence&gt;
+                    &lt;/Fallback&gt;
+                                </pre>
+                <p>If the action don't fails, what should the robot do?</p>
+                <div class="exam-task-options">
+                    <input type="radio" name="fallback-task2-option" value="a"> A. It will rotate by 90 degrees.<br>
+                    <input type="radio" name="fallback-task2-option" value="b"> B. It will move forward by 30 cm.<br>
+                    <input type="radio" name="fallback-task2-option" value="c"> C. Nothing<br>
+                </div>
+            </div>
+            <button id="fallback-validateBtn">Validate Answers</button>
+
+
+        <div class="section-navigation left" data-target="repeat">←</div>
+        <div class="section-navigation right" data-target="exams">→</div>
+    </section>
+
+    <section id="exams" class="tutorial-section">
+        <h2>Exams</h2>
+    
+        <div class="task">
+            <h3>Translate</h3>
+            <p>Let the robot move forward 30 cm.</p>
+            <p>Let the robot move forward 25 cm, and then another 50 cm.</p>
+        </div>
+    
+        <div class="task">
+            <h3>Rotation</h3>
+            <p>Let the robot rotate by 100 degrees.</p>
+            <p>Let the robot make a semicircle, and then a full circle.</p>
+            <p>After the robot completes a full circle rotation, let it move forward 20 cm.</p>
+            <p>Let the robot rotate by 90 degrees, move forward 1 meter, and then rotate by an additional 180 degrees.</p>
+        </div>
+    
+        <div class="task">
+            <h3>Repeat</h3>
+            <p>Let the robot move 1 meter in steps of 25 cm.</p>
+            <p>Let the robot rotate by 120 degrees in steps of 12 degrees.</p>
+            <p>Let the robot first rotate for two full circles, and then move forward 30 cm.</p>
+            <p>When the robot moves forward 50 cm, let it move 80 cm in steps of 25 cm, and then rotate by an additional 30 degrees.</p>
+        </div>
+    
+        <div class="task">
+            <h3>Fallback</h3>
+            <p>Let the robot move forward 1 meter. In case of failure, let it rotate by 110 degrees.</p>
+            <p>If the robot moves forward 30 cm and fails, let it attempt to rotate by 100 degrees. If that also fails, let it move to the other side by 60 degrees.</p>
+            <p>Let the robot move forward. In case it cannot move forward, let it move backward by 20 cm, and then rotate by 90 degrees.</p>
+        </div>
+    
+        <!-- Navigation Button -->
+        <div class="section-navigation left" data-target="fallback">←</div>
+    </section>
+    
+    
+
+    
+
+    <!-- Dodatni element za link sa ikonicom u gornjem desnom uglu -->
+    <a id="link-behaviortree" href="https://www.behaviortree.dev/docs/Intro" target="_blank">
+        <img src="bt_icon.png" alt="Behavior Tree Icon" style="width: 60px; height: 60px; max-width: none; max-height: none;">
+        Behavior Tree
+    </a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/xml.min.js"></script>
+
+    <script>
+        // Explicitly specify the language for highlighting
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const xmlCodeElements = document.querySelectorAll('.xml-code pre');
+            
+            xmlCodeElements.forEach((codeElement) => {
+                codeElement.classList.add('language-xml');
+            });
+
+            hljs.highlightElement(xmlCodeElements[0]); // Highlight the first code element
+            hljs.highlightElement(xmlCodeElements[1]);
+            hljs.highlightElement(xmlCodeElements[2]);
+            hljs.highlightElement(xmlCodeElements[3]);
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prikazuje Introduction sekciju kao podrazumevanu
+            showSection('introduction');
+
+            // Dodaje event listenere za sva dugmad u navigaciji
+            document.querySelectorAll('nav a').forEach(function(navLink) {
+                navLink.addEventListener('click', function(event) {
+                    // Spriječava uobičajeno ponašanje linkova
+                    event.preventDefault();
+
+                    // Dobavlja ID sekcije iz href atributa linka
+                    var sectionId = this.getAttribute('href').substring(1);
+
+                    // Prikazuje odabranu sekciju
+                    showSection(sectionId);
+                });
+            });
+        });
+
+        function showSection(sectionId) {
+            // Sakriva sve sekcije
+            document.querySelectorAll('section').forEach(function(section) {
+                section.style.display = 'none';
+            });
+
+            // Prikazuje odabranu sekciju
+            document.getElementById(sectionId).style.display = 'block';
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Proverava da li je Introduction sekcija već prikazana
+            var introductionShown = localStorage.getItem('introductionShown');
+
+            // Ako nije prikazana, prikazuje je i označava kao prikazanu
+            if (!introductionShown) {
+                showSection('introduction');
+                localStorage.setItem('introductionShown', 'true');
+            }
+
+            // Dodaje event listenere za sva dugmad u navigaciji
+            document.querySelectorAll('nav a').forEach(function(navLink) {
+                navLink.addEventListener('click', function(event) {
+                    // Spriječava uobičajeno ponašanje linkova
+                    event.preventDefault();
+
+                    // Dobavlja ID sekcije iz href atributa linka
+                    var sectionId = this.getAttribute('href').substring(1);
+
+                    // Prikazuje odabranu sekciju
+                    showSection(sectionId);
+                });
+            });
+
+            // Dodaje strelice za navigaciju
+            document.querySelectorAll('.section-navigation').forEach(function(navElement) {
+                navElement.addEventListener('click', function(event) {
+                    // Dobavlja ID sledeće ili prethodne sekcije
+                    var targetSection = this.getAttribute('data-target');
+                    
+                    // Prikazuje odabranu sekciju
+                    showSection(targetSection);
+                });
+            });
+        });
+
+        function showSection(sectionId) {
+            // Sakriva sve sekcije
+            document.querySelectorAll('section').forEach(function(section) {
+                section.style.display = 'none';
+            });
+            setActiveLink(sectionId);
+            // Prikazuje odabranu sekciju
+            document.getElementById(sectionId).style.display = 'block';
+        }
+    </script>
+    <script>
+        // Funkcija koja se poziva kada se klikne na link u navigaciji
+        function setActiveLink(sectionId) {
+            // Uklonite aktivnost sa svih linkova
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+        
+            // Dodajte aktivnu klasu samo odabranom linku
+            document.querySelector(`nav a[href="#${sectionId}"]`).classList.add('active');
+        }
+        
+        // Povežite ovu funkciju s događajem kada se promijeni sekcija (npr. kada se klikne na strelice za navigaciju)
+        function navigateSection(direction) {
+            // Logika za promjenu sekcije
+            // ...
+        
+            // Nakon promjene sekcije, postavite aktivni link
+            setActiveLink('nova-sekcija-id'); // Zamijenjajte 'nova-sekcija-id' s ID-em nove sekcije
+        }
+        </script>
+
+
+
+        <script>
+            const correctAnswers = ['b', 'b', 'c'];
+            
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('showTasksBtn').addEventListener('click', function () {
+                    // Show/hide exam tasks
+                    document.querySelectorAll('#translate .exam-task').forEach(function (task) {
+                        task.style.display = 'block';
+            
+                        task.querySelectorAll('.exam-task-options input[type="radio"]').forEach(function (radio) {
+                            radio.checked = false;
+                        });
+                    });
+            
+                    document.getElementById('validateBtn').style.display = 'inline-block';
+            
+                    this.style.display = 'none';
+                });
+            
+                document.getElementById('validateBtn').addEventListener('click', function () {
+                    validateAllTasks();
+                });
+            
+                document.querySelectorAll('#translate .exam-task-options input[type="radio"]').forEach(function (radio) {
+                    if (document.getElementById('validateBtn').style.display !== 'none') {
+                        validateTask(this, correctAnswers);
+                    }
+                });
+            });
+            
+            function validateTask(radio) {
+                
+                const selectedOption = radio.value;
+                const taskContainer = radio.closest('.exam-task');
+
+                taskContainer.querySelectorAll('.exam-task-options label').forEach(function (label) {
+                    label.classList.remove('correct-answer', 'incorrect-answer');
+                });
+                
+                if (correctAnswers[0].includes(selectedOption)) {
+                    correctAnswers.shift();
+                    radio.parentNode.classList.add('correct-answer');
+                } else {
+                    correctAnswers.shift();
+                    radio.parentNode.classList.add('incorrect-answer');
+                }
+                
+            }
+
+            function validateAllTasks() {
+                const allTasks = document.querySelectorAll('#translate .exam-task');
+            
+                allTasks.forEach(function (task) {
+                    const radios = task.querySelectorAll('.exam-task-options input[type="radio"]');
+                    let anyChecked = false;
+            
+                    radios.forEach(function (radio) {
+                        if (radio.checked) {
+                            validateTask(radio);
+                            anyChecked = true;
+                        }
+                    });
+            
+                    if (!anyChecked) {
+                        radios.forEach(function (radio) {
+                            radio.parentNode.classList.add('incorrect-answer');
+                        });
+                    }
+                });
+            
+                alert('Validating all tasks...');
+            }      
+        </script>        
+
+        <script>
+            const rotateCorrectAnswers = ['b', 'd', 'a', 'c'];
+        
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('rotate-showTasksBtn').addEventListener('click', function () {
+                    document.querySelectorAll('#rotate .exam-task').forEach(function (task) {
+                        task.style.display = 'block';
+        
+                        task.querySelectorAll('.exam-task-options input[type="radio"]').forEach(function (radio) {
+                            radio.checked = false;
+                        });
+                    });
+        
+                    document.getElementById('rotate-validateBtn').style.display = 'inline-block';
+                    this.style.display = 'none';
+                });
+        
+                document.getElementById('rotate-validateBtn').addEventListener('click', function () {
+                    validateAllRotateTasks();
+                });
+        
+                
+            });
+        
+            function validateRotateTask(radio) {
+                const selectedOption = radio.value;
+                const taskContainer = radio.closest('.exam-task');
+        
+                taskContainer.querySelectorAll('.exam-task-options label').forEach(function (label) {
+                    label.classList.remove('correct-answer', 'incorrect-answer');
+                });
+        
+                if (rotateCorrectAnswers[0].includes(selectedOption)) {
+                    rotateCorrectAnswers.shift();
+                    radio.parentNode.classList.add('correct-answer');
+                } else {
+                    rotateCorrectAnswers.shift();
+                    radio.parentNode.classList.add('incorrect-answer');
+                }
+            }
+        
+            function validateAllRotateTasks() {
+                const allTasks = document.querySelectorAll('#rotate .exam-task');
+        
+                allTasks.forEach(function (task) {
+                    const radios = task.querySelectorAll('.exam-task-options input[type="radio"]');
+                    let anyChecked = false;
+        
+                    radios.forEach(function (radio) {
+                        if (radio.checked) {
+                            validateRotateTask(radio);
+                            anyChecked = true;
+                        }
+                    });
+        
+                    if (!anyChecked) {
+                        radios.forEach(function (radio) {
+                            radio.parentNode.classList.add('incorrect-answer');
+                        });
+                    }
+                });
+        
+                alert('Validating all Rotate tasks...');
+            }
+        </script>
+
+        <script>
+            const repeatCorrectAnswers = ['a', 'c', 'c'];
+        
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('repeat-showTasksBtn').addEventListener('click', function () {
+                    // Show/hide exam tasks
+                    document.querySelectorAll('#repeat .exam-task').forEach(function (task) {
+                        task.style.display = 'block';
+        
+                        task.querySelectorAll('.exam-task-options input[type="radio"]').forEach(function (radio) {
+                            radio.checked = false;
+                        });
+                    });
+        
+                    document.getElementById('repeat-validateBtn').style.display = 'inline-block';
+        
+                    this.style.display = 'none';
+                });
+        
+                document.getElementById('repeat-validateBtn').addEventListener('click', function () {
+                    validateAllRepeatTasks();
+                });
+        
+                
+            });
+        
+            function validateRepeatTask(radio) {
+                const selectedOption = radio.value;
+                const taskContainer = radio.closest('.exam-task');
+        
+                taskContainer.querySelectorAll('.exam-task-options label').forEach(function (label) {
+                    label.classList.remove('correct-answer', 'incorrect-answer');
+                });
+        
+                if (repeatCorrectAnswers[0].includes(selectedOption)) {
+                    repeatCorrectAnswers.shift();
+                    radio.parentNode.classList.add('correct-answer');
+                } else {
+                    repeatCorrectAnswers.shift();
+                    radio.parentNode.classList.add('incorrect-answer');
+                }
+            }
+        
+            function validateAllRepeatTasks() {
+                const allTasks = document.querySelectorAll('#repeat .exam-task');
+                allTasks.forEach(function (task) {
+                    const radios = task.querySelectorAll('.exam-task-options input[type="radio"]');
+                    let anyChecked = false;
+        
+                    radios.forEach(function (radio) {
+                        if (radio.checked) {
+                            validateRepeatTask(radio);
+                            anyChecked = true;
+                        }
+                    });
+        
+                    if (!anyChecked) {
+                        radios.forEach(function (radio) {
+                            radio.parentNode.classList.add('incorrect-answer');
+                        });
+                    }
+                });
+        
+                alert('Validating all repeat tasks...');
+            }
+        </script>
+        
+
+        <script>
+            const fallbackCorrectAnswers = ['b', 'a'];
+        
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('fallback-showTasksBtn').addEventListener('click', function () {
+                    // Show/hide exam tasks
+                    document.querySelectorAll('#fallback .exam-task').forEach(function (task) {
+                        task.style.display = 'block';
+        
+                        task.querySelectorAll('.exam-task-options input[type="radio"]').forEach(function (radio) {
+                            radio.checked = false;
+                        });
+                    });
+        
+                    document.getElementById('fallback-validateBtn').style.display = 'inline-block';
+        
+                    this.style.display = 'none';
+                });
+        
+                document.getElementById('fallback-validateBtn').addEventListener('click', function () {
+                    validateAllFallbackTasks();
+                });
+        
+                
+            });
+        
+            function validateFallbackTask(radio) {
+                const selectedOption = radio.value;
+                const taskContainer = radio.closest('.exam-task');
+        
+                taskContainer.querySelectorAll('.exam-task-options label').forEach(function (label) {
+                    label.classList.remove('correct-answer', 'incorrect-answer');
+                });
+        
+                if (fallbackCorrectAnswers[0].includes(selectedOption)) {
+                    fallbackCorrectAnswers.shift();
+                    radio.parentNode.classList.add('correct-answer');
+                } else {
+                    fallbackCorrectAnswers.shift();
+                    radio.parentNode.classList.add('incorrect-answer');
+                }
+            }
+            function validateAllFallbackTasks() {
+                const allTasks = document.querySelectorAll('#fallback .exam-task');
+                allTasks.forEach(function (task) {
+                    const radios = task.querySelectorAll('.exam-task-options input[type="radio"]');
+                    let anyChecked = false;
+        
+                    radios.forEach(function (radio) {
+                        if (radio.checked) {
+                            validateFallbackTask(radio);
+                            anyChecked = true;
+                        }
+                    });
+        
+                    if (!anyChecked) {
+                        radios.forEach(function (radio) {
+                            radio.parentNode.classList.add('incorrect-answer');
+                        });
+                    }
+                });
+        
+                alert('Validating all fallback tasks...');
+            }
+        </script>
+
+
+</head>
+<body>
+
+</body>
+</html>

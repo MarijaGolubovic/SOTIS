@@ -1,0 +1,45 @@
+	<BehaviorTree ID="USER_TREE">
+		<Sequence>
+		<Repeat num_cycles="2">	
+		<Translate name="TRANSLATE"
+		       frame_id="base_link"
+		       ignore_obstacles="True"
+		       x="0.5"
+		   error="error"/>
+		</Repeat>
+		<Move name="ROTATE"
+		       frame_id="base_link"
+		   mode="1"
+		       ignore_obstacles="True"
+		       x="0"
+		   y="0"
+		   yaw="150"    
+		       error="error"
+		   reversing="0"/>
+		<Fallback>
+		<Translate name="TRANSLATE"
+		       frame_id="base_link"
+		       ignore_obstacles="True"
+		       x="0.1"
+		   error="error"/>
+		<Move name="ROTATE"
+		       frame_id="base_link"
+		   mode="1"
+		       ignore_obstacles="True"
+		       x="0"
+		   y="0"
+		   yaw="120"    
+		       error="error"
+		   reversing="0"/>
+	</Fallback>
+		<Move name="ROTATE"
+		       frame_id="base_link"
+		   mode="1"
+		       ignore_obstacles="True"
+		       x="0"
+		   y="0"
+		   yaw="10."    
+		       error="error"
+		   reversing="0"/>
+		</Sequence>
+	</BehaviorTree>
