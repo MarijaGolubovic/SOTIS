@@ -1,12 +1,13 @@
 # SOTIS - Robot Playground
+This repo represent part of platform for robot control. You need to have this platform if you want to run all system. For running only this part you need follow this guide.
 
 ## Application Setup Guide
 
 ### First-time Setup
 
-1. Navigate to the container by executing the following command:
+1. Install all dependecies:
     ```bash
-    make build start exec
+    pip3 install llama-cpp-python tk Jinja2
     ```
    This is only necessary the first time.
 
