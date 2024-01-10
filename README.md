@@ -1,5 +1,6 @@
 # SOTIS - Robot Playground
 This repo represent part of platform for robot control. You need to have this platform if you want to run all system. For running only this part you need follow this guide.
+The capability of this system you can see on this [YouTube video](https://www.youtube.com/watch?v=KuY5AQD2W4I).
 
 ## Application Setup Guide
 
