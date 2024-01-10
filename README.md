@@ -18,7 +18,7 @@ This repo represent part of platform for robot control. You need to have this pl
 
 Running the Application
 
-After downloading and copying the LLama model into the assets directory, run the application with the following command:
+After downloading and copying the LLama model into the assets directory, run the application with the following command inside assets directory:
 ```
 python3 gui.py
 ```
