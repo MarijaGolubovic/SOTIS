@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+	 <BehaviorTree ID="Tree2">
+		<Translate name="Action#1"
+		   frame_id="base_link"
+		   ignore_obstacles="false"
+		   x="0.075"
+		   error="error"/>
+		<Translate name="Action#1"
+		   direction=""
+		   image_segment="0.5"
+		   kp="45"
+		   object_class="0"
+		   tolerance="0.03"
+		   type="="/>
+	</BehaviorTree>
+</root>
